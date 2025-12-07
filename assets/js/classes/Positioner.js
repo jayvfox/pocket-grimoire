@@ -28,7 +28,7 @@ export default class Positioner {
                 return Math.sqrt( (radiusX * Math.sin(radians)) ** 2 + (radiusY * Math.cos(radians)) ** 2 );
             }
             var precision = 0.001;
-            var offset = Math.PI * -0.5;
+            var offset = Math.PI * 0.5;
             var circ = 0;
             for (var radians = 0 + offset; radians < (Math.PI * 2 + offset); radians += precision) {
                 circ += dp(radians);
@@ -44,6 +44,26 @@ export default class Positioner {
                 }
                 run += dp(radians);
             }
+
+            return coordinates;
+
+        },
+
+        ellipseInverted(data) {
+
+            const {
+                width,
+                tokenWidth
+            } = data;
+            const radiusX = (width - tokenWidth);
+
+            const ellipseCoordsCw = Positioner.layouts.ellipse(data);
+
+            // Use map to create the new array with inverted coordinates
+            const coordinates = ellipseCoordsCw.map(([pointX, pointY]) => {
+                // Mirrors across the Y-axis
+                return [radiusX-pointX, pointY];
+            });
 
             return coordinates;
 
